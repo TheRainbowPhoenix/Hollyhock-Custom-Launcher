@@ -1,6 +1,6 @@
 # Hollyhock Custom Launcher
 
-A ClassPad-style launcher for the Casio ClassPad II, with app details and touch and keypad controls. **Version 0.6.2** is available for HH2 and HH3. An OS 7003 build is also available as a CI artifact (not yet a tagged release).
+A ClassPad-style launcher for the Casio ClassPad II, with app details and touch and keypad controls. **Version 0.6.2** is available for HH2 and HH3. An OS 7003 build is configured as a CI artifact (not yet a tagged release; available after a successful workflow run).
 
 | Your installation | Apps | Download |
 | --- | --- | --- |

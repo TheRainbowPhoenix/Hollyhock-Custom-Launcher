@@ -4,7 +4,7 @@ Die gemeinsame Oberfläche liegt unter `src/classic/`. App-Suche, Verlaufsformat
 UI-Hinweise werden über `src/target.hpp` für HH2 oder HH3 ausgewählt. Die App-Lader
 liegen getrennt unter `src/loaders/hh2/` und `src/loaders/elf/`.
 
-Beide Ausgaben nutzen das unveränderte SDK-Submodule `meta/hollyhock-3` auf Commit
+Alle Varianten nutzen das unveränderte SDK-Submodule `meta/hollyhock-3` auf Commit
 `1e483e395391d50d9bd2d21cee4beecc7589fb1c`. Es enthält OS-Adressen für 2000 und 7002. Die später hinzugefügten
 OS-7003-Adressen liegen separat und versioniert unter
 `addresses/v02.01.7003.0000/addresses.json` (aus ClasspadDev/hollyhock-3).
@@ -79,11 +79,11 @@ dieselben Quelldateien und dasselbe Ziel-Binary.
 
 Unter `dist/release/` entstehen pro Variante ein eindeutig benanntes Binary,
 Komplettpaket, `BUILD-hh2.json`/`BUILD-hh3.json`/`BUILD-hh3-7003.json` und eine eigene SHA256-Liste.
-Im Komplettpaket heißt der Launcher bereits `run.bin`; beide enthalten den
+Im Komplettpaket heißt der Launcher bereits `run.bin`; alle drei enthalten den
 vollständigen Quellstand einschließlich SDK und aller drei OS-Adressdateien.
 
 GitHub Actions prüft alle drei Varianten in einer Matrix. Ein Versionstag passend zu
-`tools/release.json` veröffentlicht beide Pakete gemeinsam. Nur der Release-Job
+`tools/release.json` veröffentlicht alle drei Pakete gemeinsam. Nur der Release-Job
 hat Schreibrechte. Auf `main` und bei Pull Requests entstehen Build-Artefakte.
 
 ## HH2-Ladevertrag

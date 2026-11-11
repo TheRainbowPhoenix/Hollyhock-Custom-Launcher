@@ -6,7 +6,7 @@ die zu deiner vorhandenen Installation passt:
 | Paket | Vorhandenes System | Unterstützte Apps |
 | --- | --- | --- |
 | HH3 | OS 02.01.7002.0001 mit HH3 | `.hh3` |
-| HH3 (CI-Artefakt, noch kein Release) | OS 02.01.7003.0000 mit HH3 | `.hh3` |
+| HH3 (CI-Artefakt nach erfolgreichem Build, noch kein Release) | OS 02.01.7003.0000 mit HH3 | `.hh3` |
 | HH2 | OS 02.01.2000.0000 mit HH2 | `.hhk`, `.hh3`, kompatible `.bin` |
 
 ## Installation
