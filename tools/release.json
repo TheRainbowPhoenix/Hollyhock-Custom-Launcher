@@ -45,6 +45,16 @@
         "cancel_result": "0x03eb",
         "source_image_sha256": "62c95f96df2c238282a4b208b9a970dbfbfd53c4aa70b938ae5cbb9c4cd06973"
       }
+    },
+    "hh3-7003": {
+      "os_version": "7003",
+      "target_os": "02.01.7003.0000",
+      "os_guard": "2025.0422.1323",
+      "formats": [
+        "HH3 ELF (.hh3)"
+      ],
+      "history_variable": "recent",
+      "return_mode": "native OS completion dialog (OS 7003; silent hook not validated)"
     }
   }
 }

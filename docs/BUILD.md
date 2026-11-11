@@ -5,8 +5,10 @@ UI-Hinweise werden über `src/target.hpp` für HH2 oder HH3 ausgewählt. Die App
 liegen getrennt unter `src/loaders/hh2/` und `src/loaders/elf/`.
 
 Beide Ausgaben nutzen das unveränderte SDK-Submodule `meta/hollyhock-3` auf Commit
-`1e483e395391d50d9bd2d21cee4beecc7589fb1c`. Es enthält OS-Adressen für 2000 und 7002.
-Die Makefile liest die passende `addresses.json` direkt daraus.
+`1e483e395391d50d9bd2d21cee4beecc7589fb1c`. Es enthält OS-Adressen für 2000 und 7002. Die später hinzugefügten
+OS-7003-Adressen liegen separat und versioniert unter
+`addresses/v02.01.7003.0000/addresses.json` (aus ClasspadDev/hollyhock-3).
+Die Makefile wählt für jede Variante die passende `addresses.json`.
 
 ## Quellen und Voraussetzungen
 
@@ -34,6 +36,20 @@ make TARGET=hh3 package
 
 Ergebnisse: `dist/hh3/run.7002.bin`, Debug-ELF und `smoke/hh3/launcher-test.hh3`.
 
+## HH3 mit OS 7003 bauen
+
+```sh
+make TARGET=hh3-7003 test
+make -j2 TARGET=hh3-7003 launcher smoke
+make TARGET=hh3-7003 target-test
+make TARGET=hh3-7003 package
+```
+
+Ergebnisse: `dist/hh3-7003/run.7003.bin`, `run.7003.elf` und das
+Paket `hhk3-launcher-0.6.2-os7003.zip`. Der bestehende `hh3`-Build
+bleibt auf OS 7002. Auf 7003 wird der native Abschlussdialog verwendet;
+der stille Rückgabeadapter ist nur für 7002 geprüft.
+
 ## HH2 bauen
 
 ```sh
@@ -46,7 +62,7 @@ make TARGET=hh2 package
 Ergebnisse: `dist/hh2/run.2000.bin`, Debug-ELF und
 `smoke/hh2/launcher-test.hhk` sowie `launcher-test.bin`. Zusätzlich wird die native HH3-Test-App für den
 HH2-Build mitgebaut und dem Paket beigelegt.
-`make hh2` und `make hh3` sind Kurzformen für Build und Test-App der jeweiligen
+`make hh2`, `make hh3` und `make hh3-7003` sind Kurzformen für Build und Test-App der jeweiligen
 Variante. Ohne Angabe bleibt HH3 voreingestellt. Build- und Abhängigkeitsordner sind
 getrennt; die gemeinsame SDK-Bibliothek wird automatisch gebaut.
 
@@ -56,16 +72,17 @@ Das SDK separat mit `make -C meta/hollyhock-3/sdk clean` bereinigen.
 ## Prüfungen und Pakete
 
 Host- und Zielprüfungen schreiben ihre tatsächlichen Ausgaben nach
-`dist/hh2/tests-*.json` bzw. `dist/hh3/tests-*.json`.
+`dist/hh2/tests-*.json`, `dist/hh3/tests-*.json` bzw.
+`dist/hh3-7003/tests-*.json`.
 Der Paketbau akzeptiert nur erfolgreiche Berichte für dieselbe Variante,
 dieselben Quelldateien und dasselbe Ziel-Binary.
 
 Unter `dist/release/` entstehen pro Variante ein eindeutig benanntes Binary,
-Komplettpaket, `BUILD-hh2.json`/`BUILD-hh3.json` und eine eigene SHA256-Liste.
+Komplettpaket, `BUILD-hh2.json`/`BUILD-hh3.json`/`BUILD-hh3-7003.json` und eine eigene SHA256-Liste.
 Im Komplettpaket heißt der Launcher bereits `run.bin`; beide enthalten den
-vollständigen Quellstand einschließlich SDK und beider OS-Adressdateien.
+vollständigen Quellstand einschließlich SDK und aller drei OS-Adressdateien.
 
-GitHub Actions prüft beide Varianten in einer Matrix. Ein Versionstag passend zu
+GitHub Actions prüft alle drei Varianten in einer Matrix. Ein Versionstag passend zu
 `tools/release.json` veröffentlicht beide Pakete gemeinsam. Nur der Release-Job
 hat Schreibrechte. Auf `main` und bei Pull Requests entstehen Build-Artefakte.
 

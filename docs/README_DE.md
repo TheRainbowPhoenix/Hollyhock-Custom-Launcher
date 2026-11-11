@@ -6,17 +6,18 @@ die zu deiner vorhandenen Installation passt:
 | Paket | Vorhandenes System | Unterstützte Apps |
 | --- | --- | --- |
 | HH3 | OS 02.01.7002.0001 mit HH3 | `.hh3` |
+| HH3 (CI-Artefakt, noch kein Release) | OS 02.01.7003.0000 mit HH3 | `.hh3` |
 | HH2 | OS 02.01.2000.0000 mit HH2 | `.hhk`, `.hh3`, kompatible `.bin` |
 
 ## Installation
 
 1. Die bisherige `run.bin` auf dem PC sichern.
-2. Das passende [Releasepaket](https://github.com/Loewenkrieger/Hollyhock-Custom-Launcher/releases/tag/v0.6.2) entpacken.
+2. Das passende [Releasepaket](https://github.com/Loewenkrieger/Hollyhock-Custom-Launcher/releases/tag/v0.6.2) entpacken. Für OS 7003 vorerst das Artefakt `launcher-hh3-7003` aus den [CI-Builds](https://github.com/TheRainbowPhoenix/Hollyhock-Custom-Launcher/actions/workflows/build.yml) verwenden.
 3. Die darin ganz oben liegende `run.bin` ins Hauptverzeichnis des Taschenrechner-Laufwerks kopieren und ersetzen.
 4. Apps ebenfalls ins Hauptverzeichnis kopieren, das Laufwerk sicher auswerfen und USB trennen.
 5. Den Launcher über das System-Menü wie bisher öffnen.
 
-Die einzeln angebotenen Dateien `run-hh2-os2000.bin` und `run-hh3-os7002.bin`
+Die einzeln angebotenen Dateien `run-hh2-os2000.bin`, `run-hh3-os7002.bin` und `run-hh3-7003-os7003.bin`
 vor dem Kopieren in `run.bin` umbenennen. Es wird nur der Launcher ausgetauscht.
 
 Die Fußzeile zeigt **HH2 | 0.6.2** oder **HH3 | 0.6.2**. Zum ersten Prüfen mit Close
@@ -46,7 +47,7 @@ Die Schreibweise der Endung spielt keine Rolle. Die eigene `run.bin` wird nicht 
 Innerhalb gestarteter Apps verarbeitet die App selbst alle Eingaben.
 
 HH3 kehrt unter dem geprüften OS-7002-Aufrufer direkt zur vorherigen Casio-Ansicht
-zurück. HH2 verwendet den ursprünglichen Casio-Abschlussdialog; diesen nach dem
+zurück. OS 7003 und HH2 verwenden den ursprünglichen Casio-Abschlussdialog; diesen nach dem
 Beenden bestätigen.
 
 ## Zuletzt gestartet

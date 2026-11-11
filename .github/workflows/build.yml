@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [hh2, hh3]
+        variant: [hh2, hh3, hh3-7003]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -40,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [hh2, hh3]
+        variant: [hh2, hh3, hh3-7003]
     container:
       image: ghcr.io/classpaddev/hollyhock-3@sha256:4381a460f8b19411552ac30f2aba73da38d3aba535412a66c69f8528fe94b49a
     env:
@@ -91,6 +91,7 @@ jobs:
         run: |
           sha256sum --check SHA256SUMS-hh2.txt
           sha256sum --check SHA256SUMS-hh3.txt
+          sha256sum --check SHA256SUMS-hh3-7003.txt
       - name: Publish tested packages
         env:
           GH_TOKEN: ${{ github.token }}

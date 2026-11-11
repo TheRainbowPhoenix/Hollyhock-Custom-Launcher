@@ -8,8 +8,9 @@ import subprocess
 import tempfile
 root = Path(__file__).resolve().parents[1]
 variant = os.environ.get('LAUNCHER_TARGET','hh3')
-full = '02.01.2000.0000' if variant == 'hh2' else '02.01.7002.0001'
-addresses = json.loads((root/('meta/hollyhock-3/versions/v'+full+'/addresses.json')).read_text())
+full = {'hh2': '02.01.2000.0000', 'hh3': '02.01.7002.0001', 'hh3-7003': '02.01.7003.0000'}[variant]
+address_path = ('addresses/v' if variant == 'hh3-7003' else 'meta/hollyhock-3/versions/v') + full + '/addresses.json'
+addresses = json.loads((root/address_path).read_text())
 values = {entry['FunctionName']:int(entry['startAddress'],16) for entry in addresses['addresses']}
 width = ctypes.sizeof(ctypes.c_void_p)
 table = addresses['safeGuard'].encode()+b'\0'
