@@ -4,8 +4,18 @@
 #include <cstring>
 #include <sdk/os/gui.h>
 
+// Set by setup() when the run.bin blob was dispatched by the BAdSIC
+// Print-overflow carrier instead of the OS system-menu handler. See
+// setup.cpp for the detection rationale.
+extern bool badsic_carrier;
+
 namespace os_return {
 void *finish(int exit_status, const char *os_guard) noexcept {
+  // The BAdSIC carrier epilogue resumes the interrupt and a
+  // blocking message box would wedge the suspended handler's context.
+  if (badsic_carrier)
+    return nullptr;
+
   // This firmware hook is a dialog factory, not a void callback. Its caller
   // immediately dereferences the result, so nullptr resets the calculator.
   if (exit_status == 0 && std::strcmp(os_guard, "2023.0209.1500") == 0 &&
