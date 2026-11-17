@@ -7,6 +7,10 @@
 #include <iostream>
 #include <string>
 
+// setup.cpp defines this for the launcher, but is intentionally not linked
+// into the standalone host exit-protocol test.
+bool badsic_carrier = false;
+
 namespace {
 int native_calls = 0;
 char native_object;
@@ -32,6 +36,15 @@ void *(*GUI_DisplayMessageBox_Internal)(int, const char *, const char *, const c
 }
 
 int main() {
+  // BAdSIC resumes the interrupted Print handler: returning a dialog
+  // object or opening a blocking message box would break that carrier.
+  badsic_carrier = true;
+  assert(os_return::finish(0, "2023.0209.1500") == nullptr);
+  assert(os_return::finish(0x123, "2023.0209.1500") == nullptr);
+  assert(native_calls == 0);
+  badsic_carrier = false;
+  std::cout << "PASS BAdSIC carrier skips the dialog on success and failure\n";
+
   // Independently captured from the SHA-pinned original OS image. These are
   // instructions in its consumer, not a copy of our ReturnObject definition.
   constexpr unsigned char caller[] = {
@@ -81,5 +94,5 @@ int main() {
   assert(os_return::finish(0x123, "2023.0209.1500") == &native_object);
   assert(last_prefix == "Fehlercode: " && last_content.ends_with("123"));
   std::cout << "PASS nonzero exits retain an explicit error dialog and avoid the silent return\n";
-  std::cout << "6/6 return-protocol checks passed\n";
+  std::cout << "7/7 return-protocol checks passed\n";
 }
