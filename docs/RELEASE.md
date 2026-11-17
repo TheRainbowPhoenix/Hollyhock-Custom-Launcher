@@ -9,15 +9,18 @@ Neu in dieser Ausgabe:
 | --- | --- | --- |
 | hhk2-launcher-0.6.2-os2000.zip | HH2 auf OS 02.01.2000.0000 | .hhk, .hh3 und kompatible .bin |
 | hhk3-launcher-0.6.2-os7002.zip | HH3 auf OS 02.01.7002.0001 | .hh3 |
+| hhk3-launcher-0.6.2-os7003.zip | HH3 auf OS 02.01.7003.0000 | .hh3 |
 
-Beide Pakete enthalten eine fertig benannte `run.bin`, Testprogramme, Anleitung,
+Alle drei Pakete enthalten eine fertig benannte `run.bin`, Testprogramme, Anleitung,
 Prüfsummen, Testberichte und den vollständigen Quellcode mit SDK.
-Einzelne `run-hh2-os2000.bin`/`run-hh3-os7002.bin` vor dem Kopieren in `run.bin`
+Einzelne `run-hh2-os2000.bin`/`run-hh3-os7002.bin`/`run-hh3-7003-os7003.bin` vor dem Kopieren in `run.bin`
 umbenennen. Die bisherige `run.bin` vorher sichern.
 
 Touch-/Tastenbedienung, App-Formate und die fünf zuletzt gestarteten Apps bleiben
 erhalten. HH2 und HH3 speichern getrennte Verläufe. HH3-Apps müssen zur
 vorhandenen OS-Version passen.
 
-Beide Varianten sind automatisiert geprüft. Der abschließende Test dieser
+Alle drei Varianten werden automatisiert geprüft. Der OS-7003-Build verwendet die
+OS-7003-Adressdatei mit Safeguard `2025.0422.1323` und den nativen Abschlussdialog
+(stiller Rückgabeadapter nur für OS 7002). Der abschließende Test dieser
 Ausgabe an echten HH2-/HH3-Geräten steht noch aus.

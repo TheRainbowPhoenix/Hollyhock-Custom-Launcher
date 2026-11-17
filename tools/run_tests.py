@@ -11,26 +11,30 @@ import hashlib
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument('suite', choices=['host', 'target'])
-parser.add_argument('--variant', choices=['hh2','hh3'], default='hh3')
+parser.add_argument('--variant', choices=['hh2','hh3','hh3-7003'], default='hh3')
 parser.add_argument('--outdir', type=Path, default=root / 'dist')
 args = parser.parse_args()
 import os
 os.environ["LAUNCHER_TARGET"] = args.variant
-version = "2000" if args.variant == "hh2" else "7002"
+version = {"hh2": "2000", "hh3": "7002", "hh3-7003": "7003"}[args.variant]
 commands = [[sys.executable, 'tests/test_' + name + '.py'] for name in
             ['classic', 'discovery', 'loader', 'recent', 'launch', 'exit']]
 if args.variant == 'hh2': commands.insert(3,[sys.executable,'tests/test_hh2.py'])
 commands.extend([[sys.executable,'tests/test_elf_load.py'],[sys.executable,'tests/test_sdk_relink.py']])
 commands[0] += ['--preview', str(args.outdir / 'preview')]
 if args.suite == 'target':
-    commands = [[sys.executable, 'tests/test_mcs_abi.py'],
-                [sys.executable, '-c',
-                 'import sys; from pathlib import Path; sys.path.insert(0,"tests"); '
-                 'import exit_sh_consumer; exit_sh_consumer.test('
-                 'Path(sys.argv[1]), Path(sys.argv[2]), "sh4a_nofpueb-elf-nm")',
-                 str(args.outdir / 'run.7002.elf'), str(args.outdir / ('run.' + version + '.bin'))]]
-    if args.variant == 'hh2': commands = commands[:1]
-    commands.append([sys.executable, 'tests/test_target.py', '--variant', args.variant, '--outdir', str(args.outdir)])
+    commands = [[sys.executable, 'tests/test_mcs_abi.py']]
+    # The instruction-level return consumer is verified only for OS 7002.
+    # OS 7003 uses the native dialog fallback until its firmware hook is tested.
+    if args.variant == 'hh3':
+        commands.append([sys.executable, '-c',
+                         'import sys; from pathlib import Path; sys.path.insert(0,"tests"); '
+                         'import exit_sh_consumer; exit_sh_consumer.test('
+                         'Path(sys.argv[1]), Path(sys.argv[2]), "sh4a_nofpueb-elf-nm")',
+                         str(args.outdir / 'run.7002.elf'),
+                         str(args.outdir / 'run.7002.bin')])
+    commands.append([sys.executable, 'tests/test_target.py',
+                     '--variant', args.variant, '--outdir', str(args.outdir)])
 args.outdir.mkdir(parents=True, exist_ok=True)
 report = args.outdir / ('tests-' + args.suite + '.json')
 # A failed rerun must not leave a previous success report available to package.

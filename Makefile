@@ -13,8 +13,13 @@ OS_VERSION = 7002
 OS_FULL = 02.01.7002.0001
 OS_GUARD = 2023.0209.1500
 DEFINES = -DLAUNCHER_HH2=0
+else ifeq ($(TARGET),hh3-7003)
+OS_VERSION = 7003
+OS_FULL = 02.01.7003.0000
+OS_GUARD = 2025.0422.1323
+DEFINES = -DLAUNCHER_HH2=0
 else
-$(error TARGET must be hh2 or hh3)
+$(error TARGET must be hh2, hh3, or hh3-7003)
 endif
 BUILDDIR = obj-$(TARGET)
 OUTDIR = dist/$(TARGET)
@@ -26,7 +31,7 @@ AS_FLAGS:=-gdwarf-5
 
 SDK_DIR?=meta/hollyhock-3/sdk
 SDK_PATH=$(if $(filter /%,$(SDK_DIR)),$(SDK_DIR),../../$(SDK_DIR))
-ADDRESSES_FILE=meta/hollyhock-3/versions/v$(OS_FULL)/addresses.json
+ADDRESSES_FILE=$(if $(filter hh3-7003,$(TARGET)),addresses/v$(OS_FULL)/addresses.json,meta/hollyhock-3/versions/v$(OS_FULL)/addresses.json)
 
 DEPFLAGS=-MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 WARNINGS=-Wall -Wextra -Wno-prio-ctor-dtor -pedantic -Werror -pedantic-errors
@@ -61,7 +66,7 @@ APP_HH3S := $(APP_ELFS:.elf=.adjusted.hh3)
 AS_SOURCES:=$(shell find $(SOURCEDIR) -name '*.S' -not -name '*.template.*')
 CC_SOURCES:=$(shell find $(SOURCEDIR) -name '*.c' -not -name '*.template.*')
 CXX_SOURCES:=$(shell find $(SOURCEDIR) -name '*.cpp' -not -name '*.template.*')
-ifeq ($(TARGET),hh3)
+ifneq ($(filter hh3 hh3-7003,$(TARGET)),)
 CXX_SOURCES:=$(filter-out $(SOURCEDIR)/loaders/hh2/%,$(CXX_SOURCES))
 endif
 OBJECTS := $(addprefix $(BUILDDIR)/,$(sort $(AS_SOURCES:.S=.o))) \
@@ -73,7 +78,7 @@ NOLTOOBJS := $(foreach obj, $(OBJECTS), $(if $(findstring /nolto/, $(obj)), $(ob
 DEPFILES := $(OBJECTS:$(BUILDDIR)/%.o=$(DEPDIR)/%.d)
 
 bin: $(APP_BINS) Makefile
-adjusted: $(if $(filter hh3,$(TARGET)),$(APP_HH3S)) Makefile
+adjusted: $(if $(filter hh3 hh3-7003,$(TARGET)),$(APP_HH3S)) Makefile
 elf: $(APP_ELFS) Makefile
 
 overrides: $(OVERRIDES) Makefile
@@ -93,7 +98,7 @@ launcher: sdk
 	$(MAKE) bin elf adjusted overrides
 
 smoke: sdk
-	$(MAKE) -C smoke/$(TARGET) SDK_DIR="$(SDK_PATH)" APP_NAME=launcher-test
+	$(MAKE) -C smoke/$(if $(filter hh3-7003,$(TARGET)),hh3,$(TARGET)) SDK_DIR="$(SDK_PATH)" APP_NAME=launcher-test
 ifeq ($(TARGET),hh2)
 	$(MAKE) -C smoke/hh3 SDK_DIR="$(SDK_PATH)" APP_NAME=launcher-test
 endif
@@ -110,7 +115,7 @@ package: launcher smoke
 clean:
 	rm -rf $(BUILDDIR) $(DEPDIR)
 	rm -f $(APP_BINS) $(APP_ELFS) $(APP_ELFS:%=%.map) $(APP_HH3S) $(OVERRIDES)
-	$(MAKE) -C smoke/$(TARGET) SDK_DIR="$(SDK_PATH)" APP_NAME=launcher-test clean
+	$(MAKE) -C smoke/$(if $(filter hh3-7003,$(TARGET)),hh3,$(TARGET)) SDK_DIR="$(SDK_PATH)" APP_NAME=launcher-test clean
 
 
 %.bin: %.elf
@@ -168,7 +173,7 @@ compile_commands.json: clean
 
 -include $(DEPFILES)
 
-hh2 hh3:
+hh2 hh3 hh3-7003:
 	$(MAKE) TARGET=$@ all
 
-.PHONY: hh2 hh3
+.PHONY: hh2 hh3 hh3-7003

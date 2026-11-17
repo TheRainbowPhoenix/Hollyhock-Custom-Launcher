@@ -5,11 +5,15 @@ import json
 from pathlib import Path
 import struct
 parser = argparse.ArgumentParser()
-parser.add_argument('--variant', choices=['hh2','hh3'], required=True)
+parser.add_argument('--variant', choices=['hh2','hh3','hh3-7003'], required=True)
 parser.add_argument('--outdir', type=Path, required=True)
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
-version, full, guard = ('2000','02.01.2000.0000',b'2017.0512.1515') if args.variant == 'hh2' else ('7002','02.01.7002.0001',b'2023.0209.1500')
+version, full, guard = {
+    'hh2': ('2000','02.01.2000.0000',b'2017.0512.1515'),
+    'hh3': ('7002','02.01.7002.0001',b'2023.0209.1500'),
+    'hh3-7003': ('7003','02.01.7003.0000',b'2025.0422.1323'),
+}[args.variant]
 elf = (args.outdir / ('run.' + version + '.elf')).read_bytes()
 binary = (args.outdir / ('run.' + version + '.bin')).read_bytes()
 assert elf[:8] == b'\x7fELF\x01\x02\x01\x00'
@@ -17,7 +21,8 @@ assert struct.unpack_from('>HHI',elf,16) == (2,42,1)
 assert struct.unpack_from('>I',elf,24)[0] == 0x8cfd0000
 assert 0 < len(binary) <= 0x20000
 assert guard + b'\0' in binary
-address = json.loads((root / ('meta/hollyhock-3/versions/v' + full + '/addresses.json')).read_text())
+address_path = ('addresses/v' if args.variant == 'hh3-7003' else 'meta/hollyhock-3/versions/v') + full + '/addresses.json'
+address = json.loads((root / address_path).read_text())
 assert address['safeGuard'].encode() == guard
 required = {'LCD_GetSize','LCD_GetVRAMAddress','LCD_Refresh','GetInput','MCS_GetVariable','MCS_SetVariable','MCS_CreateFolder','GUI_DisplayMessageBox_Internal'}
 assert required <= {entry['FunctionName'] for entry in address['addresses']}

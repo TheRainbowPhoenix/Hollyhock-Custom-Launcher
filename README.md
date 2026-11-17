@@ -1,13 +1,14 @@
 # Hollyhock Custom Launcher
 
-A ClassPad-style launcher for the Casio ClassPad II, with app details and touch and keypad controls. **Version 0.6.2** is available for HH2 and HH3.
+A ClassPad-style launcher for the Casio ClassPad II, with app details and touch and keypad controls. **Version 0.6.2** is available for HH2 and HH3. An OS 7003 build is configured as a CI artifact (not yet a tagged release; available after a successful workflow run).
 
 | Your installation | Apps | Download |
 | --- | --- | --- |
 | **HH3 · OS 02.01.7002.0001** | `.hh3` | [HH3 package](https://github.com/Loewenkrieger/Hollyhock-Custom-Launcher/releases/download/v0.6.2/hhk3-launcher-0.6.2-os7002.zip) |
+| **HH3 · OS 02.01.7003.0000** | `.hh3` | [CI artifact `launcher-hh3-7003`](https://github.com/TheRainbowPhoenix/Hollyhock-Custom-Launcher/actions/workflows/build.yml) (unreleased) |
 | **HH2 · OS 02.01.2000.0000** | `.hhk`, `.hh3`, compatible `.bin` | [HH2 package](https://github.com/Loewenkrieger/Hollyhock-Custom-Launcher/releases/download/v0.6.2/hhk2-launcher-0.6.2-os2000.zip) |
 
-HH2 recognizes all three extensions regardless of case. HH3 apps must support your installed OS version.
+HH2 recognizes all three extensions regardless of case. HH3 apps must support your installed OS version. **Use the launcher binary matching your exact OS**; OS 7002 and 7003 have different function addresses. OS 7003 currently uses the native return dialog rather than the OS 7002-only silent-return hook.
 
 ## Install
 

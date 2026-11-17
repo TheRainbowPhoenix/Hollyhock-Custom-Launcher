@@ -52,12 +52,31 @@ void clearLastSymbolMap() {
 static jmp_buf jump_buffer;
 static int exit_code;
 
+// BAdSIC run.bin-loader carrier (clemu/cgemu/badsic_runbin.py): the
+// loader copies the run.bin blob to 0x8CB00400 in the safe-RAM scratch
+// window and dispatches it from there; run.bin returns through the
+// trampoline in that same window and the carrier epilogue jumps back to
+// the interrupted Basic Print handler at 0x8011ed30. The OS system-menu
+// handler that normally consumes os_return::finish's dialog object
+// never runs in that flow — and its blocking message boxes would wedge
+// the suspended Print context. Detect the carrier by the .bootup return
+// address (PR at setup() entry) living in the loader window.
+bool badsic_carrier;
+static constexpr std::uintptr_t badsic_window_lo = 0x8CB00000u;
+static constexpr std::uintptr_t badsic_window_hi = 0x8CB00FFFu;
+
 extern "C" void *setup() {
+  std::uintptr_t return_address;
+  __asm__ volatile("sts pr, %0" : "=r"(return_address));
+  badsic_carrier = return_address >= badsic_window_lo &&
+                   return_address <= badsic_window_hi;
   cas_setup();
   if (setjmp(jump_buffer) != 0) {
     __libc_fini_array();
     clearLastSymbolMap();
     cas_cleanup();
+    if (badsic_carrier)
+      return nullptr; // the carrier epilogue ignores the result value
     return os_return::finish(exit_code, reinterpret_cast<const char *>(addresses));
   }
   setupEnvironment();

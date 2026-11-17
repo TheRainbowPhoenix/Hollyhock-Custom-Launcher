@@ -7,6 +7,8 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = 'meta/hollyhock-3'
 ADDRESSES = [MODULE + '/versions/v' + os + '/addresses.json' for os in ['02.01.2000.0000','02.01.7002.0001']]
+# OS 7003 was added upstream after the pinned SDK revision. Vendor just its offsets.
+ADDRESSES.append('addresses/v02.01.7003.0000/addresses.json')
 
 
 def git(*args, cwd=ROOT):

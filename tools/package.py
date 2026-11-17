@@ -11,7 +11,7 @@ import zipfile
 from source import ROOT, inventory, test_input_hash
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--variant',choices=['hh2','hh3'],required=True)
+parser.add_argument('--variant',choices=['hh2','hh3','hh3-7003'],required=True)
 parser.add_argument('--outdir', type=Path, default=ROOT / 'dist')
 args = parser.parse_args()
 out = args.outdir.resolve()

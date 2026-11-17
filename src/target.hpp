@@ -27,6 +27,7 @@ constexpr bool accepts_path(std::string_view path) {
   if (!hh2) return false;
   if (equals(extension, ".hhk")) return true;
   return equals(extension, ".bin") && !equals(file, "run.bin") &&
-      !equals(file, "run-hh2-os2000.bin") && !equals(file, "run-hh3-os7002.bin");
+      !equals(file, "run-hh2-os2000.bin") && !equals(file, "run-hh3-os7002.bin") &&
+      !equals(file, "run-hh3-7003-os7003.bin");
 }
 }
